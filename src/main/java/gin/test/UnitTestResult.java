@@ -28,6 +28,7 @@ public class UnitTestResult implements Serializable {
     private long executionTime = 0;
     private long cpuTime = 0;
     private long memoryUsage = 0;
+    private double energyUsage = 0.00;
 
 
     public UnitTestResult(UnitTest test, int rep) {
@@ -77,6 +78,8 @@ public class UnitTestResult implements Serializable {
             result.setExecutionTime(Long.parseLong(value));
             value = StringUtils.substringBetween(testResult, "CPU Time: ", ";");
             result.setCPUTime(Long.parseLong(value));
+            value = StringUtils.substringBetween(testResult, "Energy Usage: ", ";");
+            result.setEnergyUsage(Double.parseDouble(value));
 
         } catch (NumberFormatException e) {
             throw new ParseException(e.getMessage(), 0);
@@ -158,6 +161,10 @@ public class UnitTestResult implements Serializable {
     public void setMemoryUsage(long testMemoryUsage) {
         this.memoryUsage = testMemoryUsage;
     }
+
+    public void setEnergyUsage(double diff) { this.energyUsage = diff;}
+
+    public double getEnergyUsage() {return this.energyUsage;}
 
     public void setExpectedValue(String expectedValue) {
         this.expectedValue = expectedValue;
@@ -246,7 +253,7 @@ public class UnitTestResult implements Serializable {
         return String.format(
                 "UnitTestResult %s. " + "Rep number: %d; " +
                         "Passed: %b; Timed out: %b; Exception Type: %s; Exception Message: %s; " +
-                        "Assertion Expected: %s; Assertion Actual: %s; Execution Time: %d; CPU Time: %d;",
+                        "Assertion Expected: %s; Assertion Actual: %s; Execution Time: %d; CPU Time: %d; Energy Usage: %.2f;",
                 test.toString(),
                 repNumber,
                 passed,
@@ -256,7 +263,8 @@ public class UnitTestResult implements Serializable {
                 expectedValue,
                 actualValue,
                 executionTime,
-                cpuTime);
+                cpuTime,
+                energyUsage);
     }
 
 }
