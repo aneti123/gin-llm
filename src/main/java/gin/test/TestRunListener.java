@@ -1,5 +1,7 @@
 package gin.test;
 
+import jRAPL.EnergyDiff;
+import jRAPL.EnergyStats;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.concurrent.TimeoutException;
+import jRAPL.*;
 
 /**
  * Saves result of a UnitTest run into UnitTestResult.
@@ -28,6 +31,7 @@ public class TestRunListener implements Serializable, TestExecutionListener {
     private long startTime = 0;
     private long startCPUTime = 0;
     private long startMemoryUsage = 0;
+    private EnergyStats startEnergySample;
 
     public TestRunListener(UnitTestResult unitTestResult) {
         this.unitTestResult = unitTestResult;
@@ -37,6 +41,12 @@ public class TestRunListener implements Serializable, TestExecutionListener {
     public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
         if (testIdentifier.isTest()) {
             Logger.debug("Test " + testIdentifier.getDisplayName() + " finished.");
+            EnergyStats endEnergySample = energyMonitor.getSample();
+            EnergyDiff diff = EnergyDiff.between(this.startEnergySample, endEnergySample);
+            double energyDifference = diff.getPackage();
+            energyMonitor.deactivate();
+            unitTestResult.setEnergyUsage(energyDifference);
+
             long endTime = System.nanoTime();
             long endCPUTime = threadMXBean.getCurrentThreadCpuTime();
             Runtime runtime = Runtime.getRuntime();
@@ -76,6 +86,8 @@ public class TestRunListener implements Serializable, TestExecutionListener {
             this.startCPUTime = threadMXBean.getCurrentThreadCpuTime();
             Runtime runtime = Runtime.getRuntime();
             this.startMemoryUsage = (runtime.totalMemory() - runtime.freeMemory()) / MB;
+            energyMonitor.activate();
+            this.startEnergySample = energyMonitor.getSample();
         }
     }
 
