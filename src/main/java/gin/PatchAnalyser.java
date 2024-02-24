@@ -166,7 +166,7 @@ public class PatchAnalyser implements Serializable {
         Logger.info("Cleanly compiled: " + results.getCleanCompile());
         Logger.info("All tests successful: " + results.allTestsSuccessful());
         Logger.info("Total execution time: " + results.totalExecutionTime());
-
+        Logger.info("Total energy usage: " + results.totalEnergyUsage());
 
         for (UnitTestResult result : results.getResults()) {
             Logger.info(result);

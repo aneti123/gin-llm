@@ -100,6 +100,14 @@ public class UnitTestResultSet implements Serializable {
         return totalMemory;
     }
 
+    public double totalEnergyUsage() {
+        double totalEnergy = 0;
+        for (UnitTestResult testResult : results) {
+            totalEnergy += testResult.getEnergyUsage();
+        }
+        return totalEnergy;
+    }
+
     ////  Could be used to set timeout for individual tests. Unused at the moment.
     //
     //public Map<UnitTest, long[]> getUnitTestTimes() {

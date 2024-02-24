@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ce851b8-9440-4934-ae68-70af045fd2ff" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/gin/util/GPEnergy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gin/test/TestRunListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/test/TestRunListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/PatchAnalyser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/PatchAnalyser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/test/UnitTestResultSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/test/UnitTestResultSet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/util/Sampler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/util/Sampler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/gin/test/TestResultTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/gin/test/TestResultTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,17 +27,19 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="gin-llm" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
       </state>
     </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -61,15 +67,24 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="jdk-17.0.9-corretto-17.0.9-249ae16d76d6-af57353a" />
-      </set>
-    </attachedChunks>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -80,7 +95,8 @@
       <option name="presentableId" value="Default" />
       <updated>1708794656968</updated>
       <workItem from="1708794658106" duration="1368000" />
-      <workItem from="1708800323584" duration="1104000" />
+      <workItem from="1708800323584" duration="1276000" />
+      <workItem from="1708801608777" duration="1670000" />
     </task>
     <servers />
   </component>

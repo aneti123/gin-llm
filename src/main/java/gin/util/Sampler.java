@@ -46,7 +46,7 @@ public abstract class Sampler implements Serializable {
     /*============== Optional (required only for certain types of projects, ignored otherwise)  ==============*/
     // Used for writing data to outputFile
     private static final String[] OUT_HEADER = {"PatchIndex", "PatchSize", "Patch", "MethodIndex", "TestIndex", "UnitTest", "RepNumber",
-            "PatchValid", "PatchCompiled", "TestPassed", "TestExecutionTime(ns)", "TestCPUTime(ns)",
+            "PatchValid", "PatchCompiled", "TestPassed", "TestExecutionTime(ns)", "TestCPUTime(ns)", "EnergyUsage(J)",
             "TestTimedOut", "TestExceptionType", "TestExceptionMessage", "AssertionExpectedValue",
             "AssertionActualValue", "NoOp", "EditsValid"};
     private static final Integer DEFAULT_ID = 0; // default id for MethodIndex
@@ -465,6 +465,7 @@ public abstract class Sampler implements Serializable {
         String testPassed = Boolean.toString(testResult.getPassed());
         String testExecutionTime = Long.toString(testResult.getExecutionTime());
         String testCPUTime = Long.toString(testResult.getCPUTime());
+        String testEnergyUsage = Double.toString(testResult.getEnergyUsage());
         String testTimedOut = Boolean.toString(testResult.getTimedOut());
         String testExceptionType = testResult.getExceptionType();
         String testExceptionMessage = testResult.getExceptionMessage();
@@ -489,6 +490,7 @@ public abstract class Sampler implements Serializable {
                 testPassed,
                 testExecutionTime,
                 testCPUTime,
+                testEnergyUsage,
                 testTimedOut,
                 testExceptionType,
                 testExceptionMessage,
