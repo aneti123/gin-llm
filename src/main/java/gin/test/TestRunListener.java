@@ -28,6 +28,7 @@ public class TestRunListener implements Serializable, TestExecutionListener {
     private static final long MB = 1024 * 1024;
     private static final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
     private final UnitTestResult unitTestResult;
+    private final SyncEnergyMonitor energyMonitor = new SyncEnergyMonitor();
     private long startTime = 0;
     private long startCPUTime = 0;
     private long startMemoryUsage = 0;
