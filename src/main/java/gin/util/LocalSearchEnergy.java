@@ -6,27 +6,25 @@ import gin.test.UnitTestResultSet;
 
 import java.util.List;
 
-public class GPEnergy extends GPSimple {
-
-    public GPEnergy(String[] args) {
+public class LocalSearchEnergy extends LocalSearchSimple {
+    public LocalSearchEnergy(String[] args) {
         super(args);
     }
 
     public static void main(String[] args) {
-        GPEnergy sampler = new GPEnergy(args);
+        LocalSearchEnergy sampler = new LocalSearchEnergy(args);
         sampler.sampleMethods();
     }
-    @Override
+
     protected double compareFitness(double newFitness, double oldFitness) {
         return oldFitness - newFitness;
     }
 
-    @Override
+    // this method is used to get the initial fitness of the program
     protected UnitTestResultSet initFitness(String className, List<UnitTest> tests, Patch origPatch) {
         return testPatch(className, tests, origPatch, null);
     }
 
-    @Override
     protected double fitness(UnitTestResultSet results) {
         double fitness = Double.MAX_VALUE;
         if (results.getCleanCompile() && results.allTestsSuccessful()) {
@@ -35,7 +33,6 @@ public class GPEnergy extends GPSimple {
         return fitness;
     }
 
-    @Override
     protected boolean fitnessThreshold(UnitTestResultSet results, double orig) {
         return results.allTestsSuccessful();
     }

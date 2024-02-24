@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ce851b8-9440-4934-ae68-70af045fd2ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/gin/util/GPEnergy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gin/PatchAnalyser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/PatchAnalyser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gin/test/UnitTestResultSet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/test/UnitTestResultSet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/gin/util/Sampler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/util/Sampler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/gin/test/TestResultTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/gin/test/TestResultTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gin/util/LocalSearchEnergy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/gin/util/LocalSearchEnergyKBest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/util/GPEnergy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/util/GPEnergy.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +93,7 @@
       <updated>1708794656968</updated>
       <workItem from="1708794658106" duration="1368000" />
       <workItem from="1708800323584" duration="1276000" />
-      <workItem from="1708801608777" duration="1670000" />
+      <workItem from="1708801608777" duration="3335000" />
     </task>
     <servers />
   </component>
