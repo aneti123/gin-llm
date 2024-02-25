@@ -44,7 +44,7 @@ public class TestRunListener implements Serializable, TestExecutionListener {
             Logger.debug("Test " + testIdentifier.getDisplayName() + " finished.");
             EnergyStats endEnergySample = energyMonitor.getSample();
             EnergyDiff diff = EnergyDiff.between(this.startEnergySample, endEnergySample);
-            double energyDifference = diff.getPackage();
+            double energyDifference = diff.getPackage() + diff.getGpu();
             energyMonitor.deactivate();
             unitTestResult.setEnergyUsage(energyDifference);
 
