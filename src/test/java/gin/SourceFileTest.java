@@ -70,5 +70,10 @@ public class SourceFileTest {
         public String getSource() {
             return null;
         }
+
+        @Override
+        public String getMethodSource() {
+            return null;
+        }
     }
 }
