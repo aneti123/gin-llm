@@ -62,7 +62,7 @@ public class LLMConfig {
 
 	public static String geminiProjectName = "certain-catcher-417514";
 
-	public static String geminiModelName = "certain-catcher-417514";
+	public static String geminiModelName = "certain-catcher-417514_test";
 
 	public static String geminiLocation = "europe-west2";
 
