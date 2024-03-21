@@ -211,6 +211,11 @@ public class SourceFileLine extends SourceFile {
         return buf.toString();
     }
 
+    @Override
+    public String getMethodSource() {
+        return "";
+    }
+
     /*============== the following are line editing methods ==============*/
 
     /**

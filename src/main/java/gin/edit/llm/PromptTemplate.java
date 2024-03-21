@@ -12,6 +12,11 @@ import java.util.Set;
 import org.pmw.tinylog.Logger;
 
 public class PromptTemplate {
+	// TODO: Add all of method/class source
+	// TODO: If we're just adding the method, then in getSource(), change it so only lines with line IDs in the method
+	// TODO: or add a new abstract method in SourceFile() that returns a list of lines in the source file that have lineIDs in the method
+	// To do the above, we need to add a new prompt tag and change the prompt template files.
+
 	public enum PromptTag {
 		COUNT, DESTINATION, ERROR, HINT, PREVIOUS, PROJECT;
 		

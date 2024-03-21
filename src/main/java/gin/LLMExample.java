@@ -25,12 +25,14 @@ import gin.util.LocalSearchSimple;
  */
 public class LLMExample extends LocalSearchSimple {
 
+    // command-line argument for prompt template file
     @Argument(alias = "tpt1", description = "Prompt Template 1 Filename for LLM edits")
     protected String llmPromptTemplate1 = null;
     
     @Argument(alias = "tpt2", description = "Prompt Template 2 Filename for LLM edits")
     protected String llmPromptTemplate2 = null;
-    
+
+    // constructor for class
     public LLMExample(String[] args) {
         super(args);
         Args.parseOrExit(this, args);
@@ -141,8 +143,6 @@ public class LLMExample extends LocalSearchSimple {
             super.writePatch(step, step, testResultSet, methodName, improvement, improvement);
         }
     }
-
- 
 
 
     protected UnitTestResultSet initFitness(String className, List<UnitTest> tests, Patch origPatch) {

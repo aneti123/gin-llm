@@ -17,12 +17,18 @@ public class OpenAILLMQuery implements LLMQuery {
 
     // c'tor
     public OpenAILLMQuery() {
+        // set high temperature
         // here is where the magic happens...
-        OpenAiChatModel model = OpenAiChatModel.builder().modelName(LLMConfig.openAIModelName).apiKey(LLMConfig.openAIKey).timeout(Duration.ofSeconds(LLMConfig.timeoutInSeconds)).temperature(LLMConfig.temperature).build();
+        OpenAiChatModel model = OpenAiChatModel.builder()
+                .modelName(LLMConfig.openAIModelName).apiKey(LLMConfig.openAIKey)
+                .timeout(Duration.ofSeconds(LLMConfig.timeoutInSeconds))
+                .temperature(LLMConfig.temperature)
+                .build();
+
         chat = AiServices.builder(Chat.class)
-                        .chatLanguageModel(model)
-                        .chatMemory(MessageWindowChatMemory.withCapacity(10))
-                        .build();
+                    .chatLanguageModel(model)
+//                    .chatMemory(MessageWindowChatMemory.withCapacity(10))
+                    .build();
     }
 
     @Override

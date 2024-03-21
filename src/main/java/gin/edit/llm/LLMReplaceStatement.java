@@ -108,52 +108,52 @@ public class LLMReplaceStatement extends StatementEdit {
         }
 
 
-	// here is where the magic happens...
-	LLMQuery llmQuery;
+        // here is where the magic happens...
+        LLMQuery llmQuery;
 
-	// Check which model to use.
-	if ("OpenAI".equalsIgnoreCase(LLMConfig.modelType)) {
+        // Check which model to use.
+        if ("OpenAI".equalsIgnoreCase(LLMConfig.modelType)) {
             llmQuery = new OpenAILLMQuery();
         } else {
             llmQuery = new Ollama4jLLMQuery("http://localhost:11434", LLMConfig.modelType);
         }
 
-	// TODO here, could call sourceFile.getSource() to provide whole class for context...
+        // TODO here, could call sourceFile.getSource() to provide whole class for context...
 
-	Logger.info("Seeking replacements for:");
-	Logger.info(destination);
+        Logger.info("Seeking replacements for:");
+        Logger.info(destination);
 
-	if(tagReplacements == null) {
-		tagReplacements = new HashMap<>();
-	}
-	tagReplacements.put(PromptTag.COUNT, Integer.toString(count));
-	tagReplacements.put(PromptTag.DESTINATION, destination.toString());
-	tagReplacements.put(PromptTag.PROJECT, LLMConfig.projectName);
+        if(tagReplacements == null) {
+            tagReplacements = new HashMap<>();
+        }
+        tagReplacements.put(PromptTag.COUNT, Integer.toString(count));
+        tagReplacements.put(PromptTag.DESTINATION, destination.toString());
+        tagReplacements.put(PromptTag.PROJECT, LLMConfig.projectName);
 
-	String prompt = promptTemplate.replaceTags(tagReplacements);
+        String prompt = promptTemplate.replaceTags(tagReplacements);
 
-        Logger.info("============");
-    	Logger.info("prompt:");
-    	Logger.info(prompt);
-    	lastPrompt = prompt;
-    	Logger.info("============");
+            Logger.info("============");
+            Logger.info("prompt:");
+            Logger.info(prompt);
+            lastPrompt = prompt;
+            Logger.info("============");
 
-	// LLM for ChatGPT
-	String answer = llmQuery.chatLLM(prompt);
-	// END of LLM code
+        // LLM for ChatGPT
+        String answer = llmQuery.chatLLM(prompt);
+        // END of LLM code
 
-        // answer includes code enclosed in ```java   ....``` or ```....``` blocks
-        // use regex to find all of these then parse into javaparser objects for return
-	Pattern pattern = Pattern.compile("```(?:java)(.*?)```", Pattern.DOTALL | Pattern.MULTILINE);
+            // answer includes code enclosed in ```java   ....``` or ```....``` blocks
+            // use regex to find all of these then parse into javaparser objects for return
+        Pattern pattern = Pattern.compile("```(?:java)(.*?)```", Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(answer);
 
         // now parse the strings return by LLM into JavaParser Statements
         List<String> replacementStrings = new ArrayList<>();
         List<Statement> replacementStatements = new ArrayList<>();
         while (matcher.find()) {
-        	String str = matcher.group(1);
+            String str = matcher.group(1);
 
-        	try {
+            try {
                 Statement stmt;
                 stmt = StaticJavaParser.parseBlock(str);
                 replacementStrings.add(str);
@@ -169,29 +169,29 @@ public class LLMReplaceStatement extends StatementEdit {
 
         int i = 1;
         for (String s : replacementStrings) {
-        	Logger.info("============");
-        	Logger.info("suggestion " + i++);
-        	Logger.info(s);
-        	Logger.info("============");
+            Logger.info("============");
+            Logger.info("suggestion " + i++);
+            Logger.info(s);
+            Logger.info("============");
         }
 
         if (replacementStrings.isEmpty()) {
-        	Logger.info("============");
-        	Logger.info("No replacements found. Response was:");
-        	Logger.info(answer);
-        	Logger.info("============");
-        	this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
+            Logger.info("============");
+            Logger.info("No replacements found. Response was:");
+            Logger.info(answer);
+            Logger.info("============");
+            this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
         } else {
-        	this.lastReplacement = replacementStrings.get(0);
+            this.lastReplacement = replacementStrings.get(0);
         }
 
         // replace the original statements with the suggested ones
         for (Statement s : replacementStatements) {
-        	try {
-	            variantSourceFiles.add(sf.replaceNode(destinationStatement, s));
-	        } catch (ClassCastException e) { // JavaParser sometimes throws this if the statements don't match
-	        	// do nothing...
-	        }
+            try {
+                variantSourceFiles.add(sf.replaceNode(destinationStatement, s));
+            } catch (ClassCastException e) { // JavaParser sometimes throws this if the statements don't match
+                // do nothing...
+            }
         }
 
         return variantSourceFiles;

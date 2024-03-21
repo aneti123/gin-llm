@@ -59,7 +59,13 @@ public class LLMConfig {
 	
     // You can use "demo" api key for demonstration purposes.
     public static String openAIKey = "demo";
-    
+
+	public static String geminiProjectName = "certain-catcher-417514";
+
+	public static String geminiModelName = "certain-catcher-417514";
+
+	public static String geminiLocation = "europe-west2";
+
     public static String openAIModelName = OpenAiModelName.GPT_3_5_TURBO;
     
     public static String modelType="OpenAI"; // Should be param from c'tor

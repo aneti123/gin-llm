@@ -295,6 +295,11 @@ public class SourceFileTree extends SourceFile {
         return this.compilationUnit.toString();
     }
 
+    @Override
+    public String getMethodSource() {
+        return "";
+    }
+
     public PackageDeclaration getPackage() {
         return this.compilationUnit.getPackageDeclaration().orElse(null);
     }

@@ -37,8 +37,11 @@ dependencies {
     implementation group: 'com.opencsv', name: 'opencsv', version: '5.3'
 
     // for LLM integrations
-    implementation 'dev.langchain4j:langchain4j:0.18.0'
+    implementation 'dev.langchain4j:langchain4j:0.28.0'
 
+    implementation 'dev.langchain4j:langchain4j-open-ai:0.28.0'
+
+    implementation 'dev.langchain4j:langchain4j-vertex-ai-gemini:0.28.0'
     // LLM: SLF4J API
     //implementation 'org.slf4j:slf4j-api:1.7.32'
 

@@ -181,6 +181,7 @@ public abstract class SourceFile implements Serializable {
      */
     public abstract String getSource();
 
+    public abstract String getMethodSource();
     public String toString() {
         return this.getSource();
     }
