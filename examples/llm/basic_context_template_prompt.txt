@@ -1,0 +1,9 @@
+Give me $COUNT$ different Java implementations of this method body, optimising it for runtime efficiency:```
+$DESTINATION$
+```
+This code belongs to project $PROJECT$, where given an integer array nums, return true if there exists a triple of indices (i, j, k) such that i < j < k and nums[i] < nums[j] < nums[k].
+If no such indices exists, return false.
+
+$CONTEXT$
+
+Wrap all code in curly braces, if it is not already. Do not include any method or class declarations. Label all code as java.

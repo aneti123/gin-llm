@@ -18,7 +18,7 @@ public class PromptTemplate {
 	// To do the above, we need to add a new prompt tag and change the prompt template files.
 
 	public enum PromptTag {
-		COUNT, DESTINATION, ERROR, HINT, PREVIOUS, PROJECT;
+		COUNT, DESTINATION, ERROR, HINT, PREVIOUS, PROJECT, CONTEXT;
 		
 		public String withEscape() {
 			return "$" + this.name() + "$";

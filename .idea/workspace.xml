@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ce851b8-9440-4934-ae68-70af045fd2ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/gin/SourceFileTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/gin/SourceFileTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/examples/llm/basic_context_template_prompt.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/LLMExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/LLMExample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/SourceFileTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/SourceFileTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/edit/llm/LLMReplaceStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/edit/llm/LLMReplaceStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/gin/edit/llm/PromptTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/gin/edit/llm/PromptTemplate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +116,8 @@
       <workItem from="1709631290350" duration="436000" />
       <workItem from="1710762285304" duration="3944000" />
       <workItem from="1711017246301" duration="3368000" />
-      <workItem from="1711024713035" duration="5458000" />
+      <workItem from="1711024713035" duration="13926000" />
+      <workItem from="1711297311982" duration="27256000" />
     </task>
     <servers />
   </component>

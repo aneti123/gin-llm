@@ -58,10 +58,12 @@ public class LLMReplaceStatement extends StatementEdit {
         destinationFilename = sourceFile.getRelativePathToWorkingDir();
 
         // target is in target method only
+        // this returns a random block ID (integer) in the target method
         destinationStatement = sf.getRandomBlockID(true, rng);
 
         this.promptTemplate = promptTemplate;
 
+        //
         lastReplacement = "NOT YET APPLIED";
         lastPrompt = "NOT YET APPLIED";
     }
@@ -88,8 +90,9 @@ public class LLMReplaceStatement extends StatementEdit {
 
     @Override
     public SourceFile apply(SourceFile sourceFile, Object tagReplacements) {
-    	List<SourceFile> l = applyMultiple(sourceFile, 5, (Map<PromptTemplate.PromptTag,String>)tagReplacements);
+    	List<SourceFile> l = applyMultiple(sourceFile, 1, (Map<PromptTemplate.PromptTag,String>)tagReplacements);
 
+        // We ask for the LLM to give 5 copies, but only pick the first one that compiles
     	if (l.size() > 0) {
     		return l.get(0); // TODO for now, just pick the first variant provided. Later, call applyMultiple from LocalSearch instead
     	} else {
@@ -106,7 +109,6 @@ public class LLMReplaceStatement extends StatementEdit {
         if (destination == null) {
             return Collections.singletonList(sf); // targeting a deleted location just does nothing.
         }
-
 
         // here is where the magic happens...
         LLMQuery llmQuery;
@@ -132,11 +134,11 @@ public class LLMReplaceStatement extends StatementEdit {
 
         String prompt = promptTemplate.replaceTags(tagReplacements);
 
-            Logger.info("============");
-            Logger.info("prompt:");
-            Logger.info(prompt);
-            lastPrompt = prompt;
-            Logger.info("============");
+//            Logger.info("============");
+//            Logger.info("prompt:");
+//            Logger.info(prompt);
+//            lastPrompt = prompt;
+//            Logger.info("============");
 
         // LLM for ChatGPT
         String answer = llmQuery.chatLLM(prompt);
@@ -167,13 +169,13 @@ public class LLMReplaceStatement extends StatementEdit {
 
         List<SourceFile> variantSourceFiles = new ArrayList<>();
 
-        int i = 1;
-        for (String s : replacementStrings) {
-            Logger.info("============");
-            Logger.info("suggestion " + i++);
-            Logger.info(s);
-            Logger.info("============");
-        }
+//        int i = 1;
+//        for (String s : replacementStrings) {
+//            Logger.info("============");
+//            Logger.info("suggestion " + i++);
+//            Logger.info(s);
+//            Logger.info("============");
+//        }
 
         if (replacementStrings.isEmpty()) {
             Logger.info("============");
@@ -190,11 +192,15 @@ public class LLMReplaceStatement extends StatementEdit {
             try {
                 variantSourceFiles.add(sf.replaceNode(destinationStatement, s));
             } catch (ClassCastException e) { // JavaParser sometimes throws this if the statements don't match
-                // do nothing...
+                Logger.info("Replace statement failed");
             }
         }
 
         return variantSourceFiles;
+    }
+
+    public String getReplacement() {
+        return this.lastReplacement;
     }
 
     @Override
