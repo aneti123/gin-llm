@@ -137,7 +137,7 @@ public class LLMReplaceStatement extends StatementEdit {
 //            Logger.info("============");
 //            Logger.info("prompt:");
 //            Logger.info(prompt);
-//            lastPrompt = prompt;
+            lastPrompt = prompt;
 //            Logger.info("============");
 
         // LLM for ChatGPT

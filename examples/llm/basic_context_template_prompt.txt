@@ -6,4 +6,4 @@ If no such indices exists, return false.
 
 $CONTEXT$
 
-Wrap all code in curly braces, if it is not already. Do not include any method or class declarations. Label all code as java.
+Wrap all code in curly braces, if it is not already. Do not include any method or class declarations or any explanations. Label all code as java.
