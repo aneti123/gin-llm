@@ -81,7 +81,7 @@ public class Patch implements Serializable, Cloneable {
         if (!edit.getClass().toString().equals(NoEdit.class.toString())) {
             if ((superClassOfEdits == null) || superClassOfEdits.isAssignableFrom(edit.getClass())) {
                 this.edits.add(edit);
-
+                Logger.info("LLM edit has been added to the old patch");
                 if (superClassOfEdits == null) {
                     if (StatementEdit.class.isAssignableFrom(edit.getClass())) {
                         superClassOfEdits = StatementEdit.class;
