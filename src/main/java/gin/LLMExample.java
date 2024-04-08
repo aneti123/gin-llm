@@ -183,6 +183,7 @@ public class LLMExample extends LocalSearchSimple {
             // if the patch is valid (at least recognised as java code), then add it to the stack to be used as context later
             if (testResultSet.getValidPatch()) {
                 String currentEdit = this.currLLMEdit.getReplacement();
+                Logger.info("========\nEdit being added to the stack: %s\n========\n", currentEdit);
                 this.stringFitnessStack.addToStack(currentEdit, testResultSet.totalExecutionTime());
             }
 
