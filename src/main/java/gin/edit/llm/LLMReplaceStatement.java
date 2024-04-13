@@ -1,6 +1,5 @@
 package gin.edit.llm;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,17 +16,11 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.stmt.Statement;
 
-import io.github.amithkoujalgi.ollama4j.core.OllamaAPI;
-
 import gin.SourceFile;
 import gin.SourceFileTree;
 import gin.edit.Edit;
 import gin.edit.llm.PromptTemplate.PromptTag;
 import gin.edit.statement.StatementEdit;
-
-import gin.edit.llm.LLMQuery;
-import gin.edit.llm.OpenAILLMQuery;
-import gin.edit.llm.Ollama4jLLMQuery;
 
 public class LLMReplaceStatement extends StatementEdit {
 
@@ -185,6 +178,7 @@ public class LLMReplaceStatement extends StatementEdit {
             this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
         } else {
             this.lastReplacement = replacementStrings.get(0);
+            Logger.info(String.format("this.lastReplacement is now equal to: **%s**", this.lastReplacement));
         }
 
         // replace the original statements with the suggested ones
@@ -199,6 +193,7 @@ public class LLMReplaceStatement extends StatementEdit {
         return variantSourceFiles;
     }
 
+    @Override
     public String getReplacement() {
         return this.lastReplacement;
     }

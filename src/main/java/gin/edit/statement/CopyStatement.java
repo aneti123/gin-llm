@@ -102,4 +102,8 @@ public class CopyStatement extends StatementEdit {
         return this.getClass().getCanonicalName() + " \"" + sourceFilename + "\":" + sourceStatement + " -> \"" + destinationFilename + "\":" + destinationBlock + ":" + destinationChildInBlock;
     }
 
+    @Override
+    public String getReplacement() {
+        return null;
+    }
 }

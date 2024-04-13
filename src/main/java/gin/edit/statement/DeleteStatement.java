@@ -53,4 +53,8 @@ public class DeleteStatement extends StatementEdit {
         return this.getClass().getCanonicalName() + " \"" + sourceFilename + "\":" + statementToDelete;
     }
 
+    @Override
+    public String getReplacement() {
+        return null;
+    }
 }

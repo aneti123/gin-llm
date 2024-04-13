@@ -96,6 +96,8 @@ public abstract class Edit implements Serializable {
 
     public abstract EditType getEditType();
 
+    public abstract String getReplacement();
+
     /**
      * @param sourceFile on which to apply the edit
      * @return updated copy of the sourceFile; or null if the edit couldn't be applied for some reason

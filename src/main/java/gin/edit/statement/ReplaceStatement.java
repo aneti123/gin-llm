@@ -84,4 +84,8 @@ public class ReplaceStatement extends StatementEdit {
         return this.getClass().getCanonicalName() + " \"" + sourceFilename + "\":" + sourceStatement + " -> \"" + destinationFilename + "\":" + destinationStatement;
     }
 
+    @Override
+    public String getReplacement() {
+        return null;
+    }
 }
