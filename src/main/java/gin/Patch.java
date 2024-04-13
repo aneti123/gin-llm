@@ -83,7 +83,7 @@ public class Patch implements Serializable, Cloneable {
         try {
             FileUtils.writeStringToFile(tmpFile, s, Charset.defaultCharset());
         } catch (IOException e) {
-            Logger.error(e, "Error outputing execution time to: " + tmpFileName);
+            Logger.error(e, "Error outputing updated class to: " + tmpFileName);
         }
 
         // write string to temp file
