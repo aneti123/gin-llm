@@ -178,7 +178,7 @@ public class LLMReplaceStatement extends StatementEdit {
             this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
         } else {
             this.lastReplacement = replacementStrings.get(0);
-            Logger.info(String.format("this.lastReplacement is now equal to: **%s**", this.lastReplacement));
+//            Logger.info(String.format("this.lastReplacement is now equal to: **%s**", this.lastReplacement));
         }
 
         // replace the original statements with the suggested ones

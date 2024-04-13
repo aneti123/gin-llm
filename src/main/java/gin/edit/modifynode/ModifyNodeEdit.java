@@ -26,4 +26,7 @@ public abstract class ModifyNodeEdit extends StatementEdit {
         return EditType.MODIFY_STATEMENT;
     }
 
+    public String getReplacement() {
+        return "";
+    };
 }

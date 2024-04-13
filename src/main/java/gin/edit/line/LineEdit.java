@@ -14,4 +14,7 @@ public abstract class LineEdit extends Edit {
         return EditType.LINE;
     }
 
+    public String getReplacement() {
+        return "";
+    };
 }

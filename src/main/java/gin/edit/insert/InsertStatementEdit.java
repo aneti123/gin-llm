@@ -14,4 +14,7 @@ public abstract class InsertStatementEdit extends StatementEdit {
         return EditType.INSERT_STATEMENT;
     }
 
+    public String getReplacement() {
+        return "";
+    };
 }
