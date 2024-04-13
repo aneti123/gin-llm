@@ -2,6 +2,7 @@ package gin;
 
 import java.util.*;
 
+import gin.edit.Edit;
 import org.pmw.tinylog.Logger;
 
 import com.sampullara.cli.Args;
@@ -13,33 +14,7 @@ import gin.edit.llm.PromptTemplate.PromptTag;
 import gin.test.UnitTest;
 import gin.test.UnitTestResult;
 import gin.test.UnitTestResultSet;
-import gin.util.LocalSearchRuntime;
 import gin.util.LocalSearchSimple;
-
-class StringFitnessStack {
-    private final Stack<String> stack = new Stack<>();
-    private long originalFitness;
-
-    public void addToStack(String replacement, long fitness) {
-        String str = "***The following edit: \n" + replacement + "\nhad an execution time of: " + fitness + "ns***\n";
-        this.stack.push(str);
-        if (stack.size() > 5) {
-            stack.pop();
-        }
-    }
-
-    public void setOriginalFitness(long fitness) {
-        this.originalFitness = fitness;
-    }
-
-    public String getStackAsString() {
-        String contextString = "The following Java blocks are implementations that you have suggested previously, and their runtime in nanoseconds (ns). The original program had a fitness of " + this.originalFitness + " and we want to do better.\n";
-        for (String str : this.stack) {
-            contextString = contextString.concat(str);
-        }
-        return contextString;
-    }
-}
 
 /**
  * Based on LocalSearchSimple. Takes a source filename and a method signature, optimises it for runtime (fitness).
@@ -56,7 +31,7 @@ public class LLMExample extends LocalSearchSimple {
     protected String llmPromptTemplate2 = null;
 
     LLMReplaceStatement currLLMEdit;
-    private final StringFitnessStack stringFitnessStack = new StringFitnessStack();
+    private final StringFitnessStack<Long> stringFitnessStack = new StringFitnessStack<>();
 
     // constructor for class
     public LLMExample(String[] args) {
@@ -144,6 +119,8 @@ public class LLMExample extends LocalSearchSimple {
             // used to initialise the prompt template
             metadata.put(PromptTag.CONTEXT, stringFitnessStack.getStackAsString());
             UnitTestResultSet testResultSet = testPatch(className, tests, neighbour, metadata);
+            Edit currLLMEdit = neighbour.getLastEdit();
+            String currentEditString = currLLMEdit.getReplacement();
 
             String msg;
             double improvement = 0;
@@ -182,9 +159,8 @@ public class LLMExample extends LocalSearchSimple {
 
             // if the patch is valid (at least recognised as java code), then add it to the stack to be used as context later
             if (testResultSet.getValidPatch()) {
-                String currentEdit = this.currLLMEdit.getReplacement();
-                Logger.info("========\nEdit being added to the stack: %s\n========\n", currentEdit);
-                this.stringFitnessStack.addToStack(currentEdit, testResultSet.totalExecutionTime());
+                Logger.info("========\nEdit being added to the stack: %s\n========\n", currentEditString);
+                this.stringFitnessStack.addToStack(currentEditString, testResultSet.totalExecutionTime());
             }
 
             Logger.info(String.format("Step: %d, Patch: %s, %s ", step, neighbour, msg));
@@ -223,11 +199,18 @@ public class LLMExample extends LocalSearchSimple {
         } else {
             // this.currLLMEdit = new LLMReplaceStatement(patch.getSourceFile(), mutationRng, template);
             // trying super.mutationRng in case that makes a difference in choosing the mutation
-            this.currLLMEdit = new LLMReplaceStatement(patch.getSourceFile(), super.mutationRng, template);
-            patch.add(this.currLLMEdit);
-            // make previous edits a dictionary with string as key and fitness as value.
-            // context will be on string with this dictionary formatted and appended together
-            // have only 5 entries in the dictionary
+
+
+//            this.currLLMEdit = new LLMReplaceStatement(patch.getSourceFile(), super.mutationRng, template);
+//            patch.add(this.currLLMEdit);
+//            patch.add(new LLMReplaceStatement(patch.getSourceFile(), super.mutationRng, template));
+            patch.add(new LLMReplaceStatement(patch.getUpdatedSourceFile(), super.mutationRng, template));
+
+
+//            addToStack = this.currLLMEdit.getReplacement();
+//            Logger.info(String.format("addToStack is now: **%s**", addToStack));
+//            Logger.info(String.format("this.addToStack is now: **%s**", this.addToStack));
+
 
             // patch.add(new LLMReplaceStatement(patch.getSourceFile(), mutationRng, template));
         }

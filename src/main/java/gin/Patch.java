@@ -4,6 +4,7 @@ import gin.edit.Edit;
 import gin.edit.Edit.EditType;
 import gin.edit.NoEdit;
 import gin.edit.line.LineEdit;
+import gin.edit.llm.LLMReplaceStatement;
 import gin.edit.statement.StatementEdit;
 import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
@@ -62,11 +63,31 @@ public class Patch implements Serializable, Cloneable {
         return this.edits;
     }
 
+    public Edit getLastEdit() {
+        return this.edits.getLast();
+    }
+
     /**
      * @return the sourcefile object that this patch was created against
      */
     public SourceFile getSourceFile() {
         return sourceFile;
+    }
+
+    public SourceFile getUpdatedSourceFile() {
+        String s = this.apply();
+        List<String> targetMethodNames = this.sourceFile.getTargetMethodStrings();
+
+        String tmpFileName = "tempFileUpdatedSource";
+        File tmpFile = new File(tmpFileName);
+        try {
+            FileUtils.writeStringToFile(tmpFile, s, Charset.defaultCharset());
+        } catch (IOException e) {
+            Logger.error(e, "Error outputing execution time to: " + tmpFileName);
+        }
+
+        // write string to temp file
+        return new SourceFileTree(tmpFileName, targetMethodNames);
     }
 
     /**

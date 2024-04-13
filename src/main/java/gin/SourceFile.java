@@ -186,6 +186,14 @@ public abstract class SourceFile implements Serializable {
         return this.getSource();
     }
 
+    public List<String> getTargetMethodStrings() {
+        List<String> targetMethodNameStrings = new ArrayList<>();
+        for (TargetMethod method : this.targetMethods) {
+            targetMethodNameStrings.add(method.methodName);
+        }
+        return targetMethodNameStrings;
+    }
+
     private static class TargetMethod {
 
         String methodName;
