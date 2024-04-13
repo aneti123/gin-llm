@@ -1,4 +1,4 @@
-package gin;
+package gin.util;
 
 import java.util.Stack;
 

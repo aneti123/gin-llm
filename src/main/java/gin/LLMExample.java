@@ -15,6 +15,7 @@ import gin.test.UnitTest;
 import gin.test.UnitTestResult;
 import gin.test.UnitTestResultSet;
 import gin.util.LocalSearchSimple;
+import gin.util.StringFitnessStack;
 
 /**
  * Based on LocalSearchSimple. Takes a source filename and a method signature, optimises it for runtime (fitness).

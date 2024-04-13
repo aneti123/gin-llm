@@ -26,4 +26,9 @@ public class NoEdit extends Edit {
         return sourceFile;
     }
 
+
+    public String getReplacement() {
+        return "";
+    }
+
 }
