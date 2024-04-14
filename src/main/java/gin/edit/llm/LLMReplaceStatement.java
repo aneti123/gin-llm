@@ -47,6 +47,8 @@ public class LLMReplaceStatement extends StatementEdit {
      */
     public LLMReplaceStatement(SourceFile sourceFile, Random rng, PromptTemplate promptTemplate) {
         SourceFileTree sf = (SourceFileTree) sourceFile;
+        String updatedSource = sf.getSource();
+        Logger.info(String.format("The updated source code is: %s", updatedSource));
 
         destinationFilename = sourceFile.getRelativePathToWorkingDir();
 
@@ -56,7 +58,6 @@ public class LLMReplaceStatement extends StatementEdit {
 
         this.promptTemplate = promptTemplate;
 
-        //
         lastReplacement = "NOT YET APPLIED";
         lastPrompt = "NOT YET APPLIED";
     }
@@ -165,10 +166,10 @@ public class LLMReplaceStatement extends StatementEdit {
             Logger.info("============");
             this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
         } else {
+            this.lastReplacement = replacementStrings.get(0);
             Logger.info("============");
             Logger.info("The LLM response was: %s", this.lastReplacement);
             Logger.info("============");
-            this.lastReplacement = replacementStrings.get(0);
         }
 
         // replace the original statements with the suggested ones
