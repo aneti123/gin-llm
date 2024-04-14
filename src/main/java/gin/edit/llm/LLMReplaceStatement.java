@@ -127,11 +127,7 @@ public class LLMReplaceStatement extends StatementEdit {
 
         String prompt = promptTemplate.replaceTags(tagReplacements);
 
-//            Logger.info("============");
-//            Logger.info("prompt:");
-//            Logger.info(prompt);
-            lastPrompt = prompt;
-//            Logger.info("============");
+        lastPrompt = prompt;
 
         // LLM for ChatGPT
         String answer = llmQuery.chatLLM(prompt);
@@ -162,14 +158,6 @@ public class LLMReplaceStatement extends StatementEdit {
 
         List<SourceFile> variantSourceFiles = new ArrayList<>();
 
-//        int i = 1;
-//        for (String s : replacementStrings) {
-//            Logger.info("============");
-//            Logger.info("suggestion " + i++);
-//            Logger.info(s);
-//            Logger.info("============");
-//        }
-
         if (replacementStrings.isEmpty()) {
             Logger.info("============");
             Logger.info("No replacements found. Response was:");
@@ -177,8 +165,10 @@ public class LLMReplaceStatement extends StatementEdit {
             Logger.info("============");
             this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
         } else {
+            Logger.info("============");
+            Logger.info("The LLM response was: %s", this.lastReplacement);
+            Logger.info("============");
             this.lastReplacement = replacementStrings.get(0);
-//            Logger.info(String.format("this.lastReplacement is now equal to: **%s**", this.lastReplacement));
         }
 
         // replace the original statements with the suggested ones
