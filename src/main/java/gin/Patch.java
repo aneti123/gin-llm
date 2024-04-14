@@ -64,6 +64,7 @@ public class Patch implements Serializable, Cloneable {
     }
 
     public Edit getLastEdit() {
+        Logger.info(String.format("The length of the edits list is %d", this.edits.size()));
         return this.edits.getLast();
     }
 

@@ -168,7 +168,7 @@ public class LLMReplaceStatement extends StatementEdit {
         } else {
             this.lastReplacement = replacementStrings.get(0);
             Logger.info("============");
-            Logger.info("The LLM response was: %s", this.lastReplacement);
+            Logger.info(String.format("The LLM response was: %s", this.lastReplacement));
             Logger.info("============");
         }
 

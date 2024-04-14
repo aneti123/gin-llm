@@ -32,6 +32,7 @@ public class LLMExample extends LocalSearchSimple {
     protected String llmPromptTemplate2 = null;
 
     private final StringFitnessStack<Long> stringFitnessStack = new StringFitnessStack<>();
+    Edit currLLMEdit;
 
     // constructor for class
     public LLMExample(String[] args) {
@@ -58,6 +59,10 @@ public class LLMExample extends LocalSearchSimple {
 
         String className = method.getClassName();
         String methodName = method.toString();
+
+        Logger.info(String.format("The class name being tested is %s", className));
+        Logger.info(String.format("The method name being tested is %s", className));
+
         List<UnitTest> tests = method.getGinTests();
 
         // we have two templates.
@@ -118,7 +123,7 @@ public class LLMExample extends LocalSearchSimple {
             // used to initialise the prompt template
             metadata.put(PromptTag.CONTEXT, stringFitnessStack.getStackAsString());
             UnitTestResultSet testResultSet = testPatch(className, tests, neighbour, metadata);
-            Edit currLLMEdit = neighbour.getLastEdit();
+//            Edit currLLMEdit = neighbour.getLastEdit();
             String currentEditString = currLLMEdit.getReplacement();
 
             String msg;
@@ -177,6 +182,7 @@ public class LLMExample extends LocalSearchSimple {
         }
         return fitness;
     }
+    // trying super.mutationRng in case that makes a difference in choosing the mutation
 
     // Calculate fitness threshold, for selection to the next generation
     protected boolean fitnessThreshold(UnitTestResultSet results, double orig) {
@@ -194,9 +200,10 @@ public class LLMExample extends LocalSearchSimple {
         if (patch.size() > 0 && super.mutationRng.nextFloat() > 0.5) {
         	patch.remove(super.mutationRng.nextInt(patch.size()));
         } else {
-            // trying super.mutationRng in case that makes a difference in choosing the mutation
+
             SourceFile updatedSourceFile = patch.getUpdatedSourceFile();
-            patch.add(new LLMReplaceStatement(updatedSourceFile, mutationRng, template));
+            currLLMEdit = new LLMReplaceStatement(updatedSourceFile, mutationRng, template);
+            patch.add(currLLMEdit);
 
             // patch.add(new LLMReplaceStatement(patch.getSourceFile(), mutationRng, template));
         }
