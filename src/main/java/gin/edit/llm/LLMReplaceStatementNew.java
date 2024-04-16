@@ -1,10 +1,6 @@
 package gin.edit.llm;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,12 +22,9 @@ public class LLMReplaceStatementNew extends StatementEdit {
     public String destinationFilename;
     public int destinationStatement;
 
-    private PromptTemplate promptTemplate;
     private String replacementString;
     private Statement replacementStatement;
-    private String answer;
 
-    /**fairly rubbish approach to having something meaningful for the toString*/
     private String lastReplacement;
     private String lastPrompt;
 
@@ -51,8 +44,6 @@ public class LLMReplaceStatementNew extends StatementEdit {
         // target is in target method only
         // this returns a random block ID (integer) in the target method
         destinationStatement = sf.getRandomBlockID(true, rng);
-
-        this.promptTemplate = promptTemplate;
 
         lastReplacement = "NOT YET APPLIED";
         lastPrompt = "NOT YET APPLIED";
@@ -75,11 +66,11 @@ public class LLMReplaceStatementNew extends StatementEdit {
         tagReplacements.put(PromptTag.DESTINATION, destination.toString());
         tagReplacements.put(PromptTag.PROJECT, LLMConfig.projectName);
 
-        String prompt = this.promptTemplate.replaceTags(tagReplacements);
+        String prompt = promptTemplate.replaceTags(tagReplacements);
         lastPrompt = prompt;
 
         // LLM for ChatGPT
-        answer = llmQuery.chatLLM(prompt);
+        String answer = llmQuery.chatLLM(prompt);
         Pattern pattern = Pattern.compile("```(?:java)(.*?)```", Pattern.DOTALL | Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(answer);
 
@@ -100,10 +91,20 @@ public class LLMReplaceStatementNew extends StatementEdit {
             }
         }
 
-    }
+//        if (replacementString == null) {
+//            Logger.info("============");
+//            Logger.info("No replacements found. Response was:");
+//            Logger.info(answer);
+//            Logger.info("============");
+//            this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
+//        } else {
+//            this.lastReplacement = replacementString;
+//            Logger.info("============");
+//            Logger.info(String.format("The LLM response was: %s", this.lastReplacement));
+//            Logger.info("============");
+//        }
+        this.lastReplacement = Objects.requireNonNullElse(replacementString, "LLM GAVE NO SUGGESTIONS");
 
-    public LLMReplaceStatementNew(SourceFile sourceFile, Random rng) {
-        this(sourceFile, rng, LLMConfig.getDefaultPromptTemplate(), null);
     }
 
     public LLMReplaceStatementNew(String destinationFilename, int destinationStatement) {
@@ -111,6 +112,7 @@ public class LLMReplaceStatementNew extends StatementEdit {
         this.destinationStatement = destinationStatement;
 
         this.lastReplacement = "NOT YET APPLIED";
+
     }
 
     public static Edit fromString(String description) {
@@ -132,26 +134,7 @@ public class LLMReplaceStatementNew extends StatementEdit {
             return sf;
         }
 
-        List<SourceFile> variantSourceFiles = new ArrayList<>();
         SourceFile variantSourceFile;
-
-        // check if replacementString is null
-        if (replacementString == null) {
-            Logger.info("No replacements found. Response was:");
-        }
-
-        if (replacementString == null) {
-            Logger.info("============");
-            Logger.info("No replacements found. Response was:");
-            Logger.info(answer);
-            Logger.info("============");
-            this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
-        } else {
-            this.lastReplacement = replacementString;
-            Logger.info("============");
-            Logger.info(String.format("The LLM response was: %s", this.lastReplacement));
-            Logger.info("============");
-        }
 
         try {
             variantSourceFile = sf.replaceNode(destinationStatement, replacementStatement);
