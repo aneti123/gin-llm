@@ -91,18 +91,7 @@ public class LLMReplaceStatementNew extends StatementEdit {
             }
         }
 
-//        if (replacementString == null) {
-//            Logger.info("============");
-//            Logger.info("No replacements found. Response was:");
-//            Logger.info(answer);
-//            Logger.info("============");
-//            this.lastReplacement = "LLM GAVE NO SUGGESTIONS";
-//        } else {
-//            this.lastReplacement = replacementString;
-//            Logger.info("============");
-//            Logger.info(String.format("The LLM response was: %s", this.lastReplacement));
-//            Logger.info("============");
-//        }
+
         this.lastReplacement = Objects.requireNonNullElse(replacementString, "LLM GAVE NO SUGGESTIONS");
 
     }

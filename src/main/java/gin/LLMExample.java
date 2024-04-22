@@ -127,7 +127,6 @@ public class LLMExample extends LocalSearchSimple {
             // used to initialise the prompt template
 //            metadata.put(PromptTag.CONTEXT, stringFitnessStack.getStackAsString());
             UnitTestResultSet testResultSet = testPatch(className, tests, neighbour, metadata);
-//            Edit currLLMEdit = neighbour.getLastEdit();
             String currentEditString = currLLMEdit.getReplacement();
 
             String msg;

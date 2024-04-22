@@ -29,7 +29,7 @@ public class StringFitnessStack<T> {
             return "";
         }
 
-        String contextString = "The following Java blocks are implementations that you have suggested previously, and their runtime in nanoseconds (ns). The original program had a fitness of " + this.originalFitness + " and we want to do better.\n";
+        String contextString = "The following Java blocks are edits that you have suggested previously, and their runtime in nanoseconds (ns). Original runtime was " + this.originalFitness + "ns and we want to do better.\n";
         for (String str : this.stack) {
             contextString = contextString.concat(str);
         }
