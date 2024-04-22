@@ -9,7 +9,6 @@ import org.pmw.tinylog.Logger;
 import com.sampullara.cli.Args;
 import com.sampullara.cli.Argument;
 
-import gin.edit.llm.LLMReplaceStatement;
 import gin.edit.llm.PromptTemplate;
 import gin.edit.llm.PromptTemplate.PromptTag;
 import gin.test.UnitTest;
@@ -36,6 +35,7 @@ public class LLMLocalSearchEnergy extends LocalSearchSimple {
 
     private final StringFitnessStack<Double> stringFitnessStack = new StringFitnessStack<>();
     Edit currLLMEdit;
+    int numRuns = 5;
 
     // constructor for class
     public LLMLocalSearchEnergy(String[] args) {
@@ -90,7 +90,7 @@ public class LLMLocalSearchEnergy extends LocalSearchSimple {
 
             Patch neighbour;
 
-            Map<PromptTemplate.PromptTag, String> metadata = new HashMap<>();
+            Map<PromptTag, String> metadata = new HashMap<>();
             metadata.put(PromptTag.CONTEXT, stringFitnessStack.getStackAsString());
             if (lastError != null) {
                 metadata.put(PromptTag.PREVIOUS, lastErrorPatch);
@@ -101,12 +101,30 @@ public class LLMLocalSearchEnergy extends LocalSearchSimple {
                 neighbour = mutate(bestPatch, regularTemplate, metadata);
             }
 
-            UnitTestResultSet testResultSet = testPatch(className, tests, neighbour, metadata);
+
+            UnitTestResultSet testResultSet = null;
+            double currFitness = 0;
+            double tempFitness;
+
+            for (int k = 0; k < this.numRuns; k++) {
+                testResultSet = testPatch(className, tests, neighbour, metadata);
+                tempFitness = fitness(testResultSet);
+                currFitness += tempFitness;
+                if (!testResultSet.getValidPatch() || !testResultSet.getCleanCompile() || !testResultSet.allTestsSuccessful()) {
+                    break;
+                }
+            }
+            currFitness /= this.numRuns;
+
             String currentEditString = this.currLLMEdit.getReplacement();
 
             String msg;
             double improvement = 0;
             lastErrorPatch = lastError = null;
+
+            if (testResultSet == null) {
+                continue;
+            }
 
             if (!testResultSet.getValidPatch()) {
                 msg = "Patch invalid";
@@ -125,17 +143,17 @@ public class LLMLocalSearchEnergy extends LocalSearchSimple {
                 for (UnitTestResult testResult : testResultSet.getResults()) {
                     lastError += testResult.getExceptionMessage() + "\n";
                 }
-            } else if (testResultSet.totalEnergyUsage() >= bestEnergy) {
-                msg = "Energy: " + testResultSet.totalEnergyUsage() + "ns";
+            } else if (currFitness >= bestEnergy) {
+                msg = "Energy: " + currFitness + "ns";
             } else {
                 bestPatch = neighbour;
-                bestEnergy = testResultSet.totalEnergyUsage();
+                bestEnergy = currFitness;
                 improvement = origEnergy - bestEnergy;
                 msg = "New best time: " + bestEnergy + "(ns)";
             }
 
             if (testResultSet.getValidPatch()) {
-                this.stringFitnessStack.addToStack(currentEditString, testResultSet.totalEnergyUsage());
+                this.stringFitnessStack.addToStack(currentEditString, currFitness);
             }
 
             Logger.info(String.format("Step: %d, Patch: %s, %s ", step, neighbour, msg));
