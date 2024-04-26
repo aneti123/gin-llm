@@ -106,7 +106,8 @@ public class LLMLocalSearchEnergy extends LocalSearchSimple {
             double currFitness = 0;
             double tempFitness;
 
-            for (int k = 0; k < this.numRuns; k++) {
+            int k;
+            for (k = 0; k < this.numRuns; k++) {
                 testResultSet = testPatch(className, tests, neighbour, metadata);
                 tempFitness = fitness(testResultSet);
                 currFitness += tempFitness;
@@ -114,7 +115,7 @@ public class LLMLocalSearchEnergy extends LocalSearchSimple {
                     break;
                 }
             }
-            currFitness /= this.numRuns;
+            currFitness /= k+1;
 
             String currentEditString = this.currLLMEdit.getReplacement();
 

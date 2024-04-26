@@ -207,7 +207,6 @@ public class LLMExample extends LocalSearchSimple {
             SourceFile updatedSourceFile = patch.getUpdatedSourceFile();
             currLLMEdit = new LLMReplaceStatementNew(updatedSourceFile, mutationRng, template, metadata);
             patch.add(currLLMEdit);
-
             // patch.add(new LLMReplaceStatement(patch.getSourceFile(), mutationRng, template));
         }
         

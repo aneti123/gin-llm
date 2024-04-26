@@ -23,6 +23,7 @@ public abstract class LocalSearchSimple extends GP {
     private static final double TOURNAMENT_PERCENTAGE = 0.2;
     // Probability of adding an edit during uniform crossover
     private static final double MUTATE_PROBABILITY = 0.5;
+    int numRuns = 5;
 
     public LocalSearchSimple(String[] args) {
         super(args);
@@ -59,10 +60,21 @@ public abstract class LocalSearchSimple extends GP {
         List<UnitTest> tests = method.getGinTests();
 
         // Run original code
-        UnitTestResultSet results = initFitness(className, tests, origPatch);
+        // UnitTestResultSet results = initFitness(className, tests, origPatch);
+        UnitTestResultSet results = null;
+        double orig = 0;
+
+        for (int k = 0; k < this.numRuns; k++) {
+            results = testPatch(className, tests, origPatch, null);
+            orig += fitness(results);
+            if (!results.getValidPatch() || !results.getCleanCompile() || !results.allTestsSuccessful()) {
+                break;
+            }
+        }
+        orig /= this.numRuns;
 
         // Calculate fitness and record result, including fitness improvement (currently 0)
-        double orig = fitness(results);
+
         super.writePatch(-1, 0, results, methodName, orig, 0);
 
         // Keep best 
@@ -75,8 +87,24 @@ public abstract class LocalSearchSimple extends GP {
             Patch patch = mutate(bestPatch);
 
             // Calculate fitness
-            results = testPatch(className, tests, patch, null);
-            double newFitness = fitness(results);
+            results = null;
+            double newFitness = 0;
+
+            int k;
+            for (k = 0; k < this.numRuns; k++) {
+                results = testPatch(className, tests, origPatch, null);
+                newFitness += fitness(results);
+                if (!results.getValidPatch() || !results.getCleanCompile() || !results.allTestsSuccessful()) {
+                    break;
+                }
+            }
+            newFitness /= k+1;
+
+            if (results == null) {
+                Logger.error("Error in testing patch");
+                continue;
+            }
+
             super.writePatch(i, i, results, methodName, newFitness, compareFitness(newFitness, orig));
 
             // Check if better
