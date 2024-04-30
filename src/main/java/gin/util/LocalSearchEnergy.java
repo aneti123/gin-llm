@@ -26,11 +26,10 @@ public class LocalSearchEnergy extends LocalSearchSimple {
     }
 
     protected double fitness(UnitTestResultSet results) {
-        double fitness = Double.MAX_VALUE;
         if (results.getCleanCompile() && results.allTestsSuccessful()) {
             return results.totalEnergyUsage();
         }
-        return fitness;
+        return Double.MAX_VALUE;
     }
 
     protected boolean fitnessThreshold(UnitTestResultSet results, double orig) {

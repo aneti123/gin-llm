@@ -68,11 +68,8 @@ public abstract class LocalSearchSimple extends GP {
         for (k = 0; k < this.numRuns; k++) {
             results = testPatch(className, tests, origPatch, null);
             orig += fitness(results);
-            if (!fitnessThreshold(results, orig)) {
-                break;
-            }
         }
-        orig /= k+1;
+        orig /= this.numRuns;
 
         // Calculate fitness and record result, including fitness improvement (currently 0)
 
@@ -93,12 +90,16 @@ public abstract class LocalSearchSimple extends GP {
 
             for (k = 0; k < this.numRuns; k++) {
                 results = testPatch(className, tests, patch, null);
-                newFitness += fitness(results);
                 if (!fitnessThreshold(results, orig)) {
                     break;
                 }
+                newFitness += fitness(results);
             }
-            newFitness /= k+1;
+            if (!fitnessThreshold(results, orig)) {
+                newFitness = Double.MAX_VALUE;
+            } else {
+                newFitness /= this.numRuns;
+            }
 
             if (results == null) {
                 Logger.error("Error in testing patch");
