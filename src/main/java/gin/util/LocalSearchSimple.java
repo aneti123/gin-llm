@@ -63,15 +63,16 @@ public abstract class LocalSearchSimple extends GP {
         // UnitTestResultSet results = initFitness(className, tests, origPatch);
         UnitTestResultSet results = null;
         double orig = 0;
+        int k;
 
-        for (int k = 0; k < this.numRuns; k++) {
+        for (k = 0; k < this.numRuns; k++) {
             results = testPatch(className, tests, origPatch, null);
             orig += fitness(results);
-            if (!results.getValidPatch() || !results.getCleanCompile() || !results.allTestsSuccessful()) {
+            if (!fitnessThreshold(results, orig)) {
                 break;
             }
         }
-        orig /= this.numRuns;
+        orig /= k+1;
 
         // Calculate fitness and record result, including fitness improvement (currently 0)
 
@@ -82,7 +83,7 @@ public abstract class LocalSearchSimple extends GP {
         Patch bestPatch = origPatch;
 
         for (int i = 1; i < indNumber; i++) {
-
+            Logger.info(String.format("Step number %d\n", i));
             // Add a mutation
             Patch patch = mutate(bestPatch);
 
@@ -90,11 +91,10 @@ public abstract class LocalSearchSimple extends GP {
             results = null;
             double newFitness = 0;
 
-            int k;
             for (k = 0; k < this.numRuns; k++) {
-                results = testPatch(className, tests, origPatch, null);
+                results = testPatch(className, tests, patch, null);
                 newFitness += fitness(results);
-                if (!results.getValidPatch() || !results.getCleanCompile() || !results.allTestsSuccessful()) {
+                if (!fitnessThreshold(results, orig)) {
                     break;
                 }
             }
