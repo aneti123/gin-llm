@@ -5,11 +5,13 @@ import org.mdkt.compiler.CompiledCode;
 import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
+
 import java.io.Serial;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * Runs tests internally, through CacheClassLoader
@@ -195,16 +197,49 @@ public class InternalTestRunner extends TestRunner {
 
         int threadsBefore = getNumberOfThreads();
 
+//        Object result;
+//        try {
+//            // stop the method from running if it runs for more than 10 seconds
+//            result = method.invoke(runner, test, rep);
+//        } catch (IllegalAccessException | InvocationTargetException e) {
+//            Logger.trace(e);
+//            UnitTestResult tempResult = new UnitTestResult(test, rep);
+//            tempResult.setExceptionType(e.getClass().getName());
+//            tempResult.setExceptionMessage(e.getMessage());
+//            tempResult.setPassed(false);
+//            result = tempResult;
+//        }
+
+        // Within your runSingleTest method
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Method finalMethod = method;
+        Object finalRunner = runner;
+
+        Future<Object> future = executor.submit(() -> {
+            return finalMethod.invoke(finalRunner, test, rep); // Call the test method
+        });
+
         Object result;
         try {
-            result = method.invoke(runner, test, rep);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+            // Retrieve the result of the invocation, but only wait for 10 seconds
+            result = future.get(10, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            Logger.error("Test timed out after 10 seconds.");
+            executor.shutdownNow(); // Attempt to stop the running task
+            UnitTestResult tempResult = new UnitTestResult(test, rep);
+            tempResult.setExceptionType(e.getClass().getName());
+            tempResult.setExceptionMessage("Test timed out after 10 seconds.");
+            tempResult.setPassed(false);
+            result = tempResult;
+        } catch (InterruptedException | ExecutionException e) {
             Logger.trace(e);
             UnitTestResult tempResult = new UnitTestResult(test, rep);
             tempResult.setExceptionType(e.getClass().getName());
             tempResult.setExceptionMessage(e.getMessage());
             tempResult.setPassed(false);
             result = tempResult;
+        } finally {
+            executor.shutdown(); // Clean up executor service
         }
 
         int threadsAfter = getNumberOfThreads();
