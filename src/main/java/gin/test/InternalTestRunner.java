@@ -142,6 +142,7 @@ public class InternalTestRunner extends TestRunner {
         List<UnitTest> testsToRun = this.getTests();
         List<UnitTestResult> results = new LinkedList<>();
         for (int r = 1; r <= reps; r++) {
+            Logger.info("Running tests for rep " + r + " of " + reps + ".");
             for (UnitTest testToRun : testsToRun) {
                 // Run the test.
                 UnitTestResult testResult = runSingleTest(testToRun, classLoader, r);
