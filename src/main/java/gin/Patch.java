@@ -91,6 +91,10 @@ public class Patch implements Serializable, Cloneable {
         return new SourceFileTree(tmpFileName, targetMethodNames);
     }
 
+    public int getNumEdits() {
+    	return this.edits.size();
+    }
+
     /**
      * add an edit to this patch.
      *

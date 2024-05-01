@@ -115,12 +115,13 @@ public class LocalSearchEnergyKBest extends GP {
 
             if (bestNeighbours.size() == k) {
                 for (Tuple tuple : bestNeighbours) {
-                    if (tuple.fitness() > best) {
+                    if (compareFitness(tuple.fitness(), best) > 0) {
                         best = tuple.fitness();
                         bestPatch = tuple.patch();
                     }
 
                 }
+                Logger.info(String.format("Patch has %d edits\n", bestPatch.getNumEdits()));
                 numAdds++;
                 bestNeighbours.clear();
             }
