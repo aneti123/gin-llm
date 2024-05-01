@@ -87,8 +87,9 @@ public class LocalSearchEnergyKBest extends GP {
         Patch bestPatch = origPatch;
         ArrayList<Tuple> bestNeighbours = new ArrayList<>();
 
+        int numAdds = 0;
         for (int i = 1; i < indNumber; i++) {
-
+            Logger.info(String.format("Step number %d\n", i));
             // Add a mutation
             Patch patch = mutate(bestPatch);
 
@@ -111,17 +112,18 @@ public class LocalSearchEnergyKBest extends GP {
                 newFitness /= repeats;
             }
 
-            super.writePatch(i,i,results, methodName, newFitness, compareFitness(newFitness, orig));
-
             if (bestNeighbours.size() == k) {
                 for (Tuple tuple : bestNeighbours) {
                     if (tuple.fitness() > best) {
                         best = tuple.fitness();
                         bestPatch = tuple.patch();
+                        numAdds++;
                     }
                 }
                 bestNeighbours.clear();
             }
+
+            super.writePatch(numAdds,i,results, methodName, newFitness, compareFitness(newFitness, orig));
         }
     }
 
