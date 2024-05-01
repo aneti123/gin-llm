@@ -104,6 +104,7 @@ public class LocalSearchEnergyKBest extends GP {
 
             if (fitnessThreshold(results, orig) && (compareFitness(newFitness, best) > 0)) {
                 bestNeighbours.add(new Tuple(patch, newFitness));
+                Logger.info(String.format("Adding neighbour on step %d, eval %d\n", i, numAdds));
             }
 
             if (!fitnessThreshold(results, orig)) {
