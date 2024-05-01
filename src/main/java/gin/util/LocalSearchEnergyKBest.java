@@ -102,15 +102,15 @@ public class LocalSearchEnergyKBest extends GP {
                 newFitness += fitness(results);
             }
 
-            if (fitnessThreshold(results, orig) && (compareFitness(newFitness, best) > 0)) {
-                bestNeighbours.add(new Tuple(patch, newFitness));
-                Logger.info(String.format("Adding neighbour on step %d, eval %d\n", i, numAdds));
-            }
-
             if (!fitnessThreshold(results, orig)) {
                 newFitness = Double.MAX_VALUE;
             } else {
                 newFitness /= repeats;
+            }
+
+            if (compareFitness(newFitness, best) > 0) {
+                bestNeighbours.add(new Tuple(patch, newFitness));
+                Logger.info(String.format("Adding neighbour on step %d, eval %d\n", i, numAdds));
             }
 
             if (bestNeighbours.size() == k) {
@@ -119,8 +119,9 @@ public class LocalSearchEnergyKBest extends GP {
                         best = tuple.fitness();
                         bestPatch = tuple.patch();
                     }
-                    numAdds++;
+
                 }
+                numAdds++;
                 bestNeighbours.clear();
             }
 
