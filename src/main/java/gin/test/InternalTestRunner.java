@@ -197,56 +197,55 @@ public class InternalTestRunner extends TestRunner {
 
         int threadsBefore = getNumberOfThreads();
 
-//        Object result;
-//        try {
-//            // stop the method from running if it runs for more than 10 seconds
-//            result = method.invoke(runner, test, rep);
-//        } catch (IllegalAccessException | InvocationTargetException e) {
-//            Logger.trace(e);
-//            UnitTestResult tempResult = new UnitTestResult(test, rep);
-//            tempResult.setExceptionType(e.getClass().getName());
-//            tempResult.setExceptionMessage(e.getMessage());
-//            tempResult.setPassed(false);
-//            result = tempResult;
-//        }
-
-        // Within your runSingleTest method
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Method finalMethod = method;
-        Object finalRunner = runner;
-
-        Future<Object> future = executor.submit(() -> {
-            return finalMethod.invoke(finalRunner, test, rep); // Call the test method
-        });
-
         Object result;
         try {
-            // Retrieve the result of the invocation, but only wait for 10 seconds
-            result = future.get(10, TimeUnit.SECONDS);
-        } catch (TimeoutException e) {
-            Logger.error("Test timed out after 10 seconds.");
-            executor.shutdownNow(); // Attempt to stop the running task
-            UnitTestResult tempResult = new UnitTestResult(test, rep);
-            tempResult.setExceptionType(e.getClass().getName());
-            tempResult.setExceptionMessage("Test timed out after 10 seconds.");
-            tempResult.setPassed(false);
-            result = tempResult;
-        } catch (InterruptedException | ExecutionException e) {
+            // stop the method from running if it runs for more than 10 seconds
+            result = method.invoke(runner, test, rep);
+        } catch (IllegalAccessException | InvocationTargetException e) {
             Logger.trace(e);
             UnitTestResult tempResult = new UnitTestResult(test, rep);
             tempResult.setExceptionType(e.getClass().getName());
             tempResult.setExceptionMessage(e.getMessage());
             tempResult.setPassed(false);
             result = tempResult;
-        } finally {
-            executor.shutdown(); // Clean up executor service
         }
 
-        int threadsAfter = getNumberOfThreads();
-
-        if (threadsAfter != threadsBefore) {
-            Logger.warn("Possible hanging threads remain after test");
-        }
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        Method finalMethod = method;
+//        Object finalRunner = runner;
+//
+//        Future<Object> future = executor.submit(() -> {
+//            return finalMethod.invoke(finalRunner, test, rep); // Call the test method
+//        });
+//
+//        Object result;
+//        try {
+//            // Retrieve the result of the invocation, but only wait for 10 seconds
+//            result = future.get(10, TimeUnit.SECONDS);
+//        } catch (TimeoutException e) {
+//            Logger.error("Test timed out after 10 seconds.");
+//            executor.shutdownNow(); // Attempt to stop the running task
+//            UnitTestResult tempResult = new UnitTestResult(test, rep);
+//            tempResult.setExceptionType(e.getClass().getName());
+//            tempResult.setExceptionMessage("Test timed out after 10 seconds.");
+//            tempResult.setPassed(false);
+//            result = tempResult;
+//        } catch (InterruptedException | ExecutionException e) {
+//            UnitTestResult tempResult = new UnitTestResult(test, rep);
+//            tempResult.setExceptionType(e.getClass().getName());
+//            tempResult.setExceptionMessage(e.getMessage());
+//            tempResult.setPassed(false);
+//            result = tempResult;
+//        } finally {
+//            executor.shutdown(); // Clean up executor service
+//        }
+//
+//        int threadsAfter = getNumberOfThreads();
+//
+//        if (threadsAfter != threadsBefore) {
+//            Logger.warn("Possible hanging threads remain after test");
+//            Logger.info(String.format("Threads before: %d, Threads after: %d", threadsBefore, threadsAfter));
+//        }
 
         return (UnitTestResult) result;
 

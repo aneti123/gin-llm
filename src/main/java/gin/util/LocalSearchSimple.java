@@ -53,14 +53,14 @@ public abstract class LocalSearchSimple extends GP {
     // Simple GP search (based on Simple)
     protected void search(TargetMethod method, Patch origPatch) {
 
-        Logger.info("Runnning best-first local search.");
+        Logger.info("Running best-first local search.");
 
         String className = method.getClassName();
         String methodName = method.toString();
         List<UnitTest> tests = method.getGinTests();
 
         // Run original code
-        // UnitTestResultSet results = initFitness(className, tests, origPatch);
+
         UnitTestResultSet results = null;
         double orig = 0;
         int k;

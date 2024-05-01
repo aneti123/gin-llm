@@ -19,7 +19,7 @@ record Tuple(Patch patch, double fitness) {
  * @brief k-best Local Search
  *
  */
-public abstract class LocalSearchEnergyKBest extends GP {
+public class LocalSearchEnergyKBest extends GP {
     // Percentage of population size to be selected during tournament selection
     private static final double TOURNAMENT_PERCENTAGE = 0.2;
     // Probability of adding an edit during uniform crossover
@@ -29,9 +29,9 @@ public abstract class LocalSearchEnergyKBest extends GP {
         super(args);
     }
 
-    // Constructor used for testing
-    public LocalSearchEnergyKBest(File projectDir, File methodFile) {
-        super(projectDir, methodFile);
+    public static void main(String[] args) {
+        LocalSearchEnergyKBest sampler = new LocalSearchEnergyKBest(args);
+        sampler.sampleMethods();
     }
 
     protected double compareFitness(double newFitness, double oldFitness) {
@@ -45,11 +45,10 @@ public abstract class LocalSearchEnergyKBest extends GP {
 
     // Calculate fitness
     protected double fitness(UnitTestResultSet results) {
-        double fitness = Double.MAX_VALUE;
         if (results.getCleanCompile() && results.allTestsSuccessful()) {
             return results.totalEnergyUsage();
         }
-        return fitness;
+        return Double.MAX_VALUE;
     }
 
     // Calculate fitness threshold, for selection to the next generation
@@ -64,62 +63,57 @@ public abstract class LocalSearchEnergyKBest extends GP {
     // Simple GP search (based on Simple)
     protected void search(TargetMethod method, Patch origPatch) {
 
-        Logger.info("Runnning best-first local search.");
+        Logger.info("Running k-best local search.");
 
         String className = method.getClassName();
         String methodName = method.toString();
         List<UnitTest> tests = method.getGinTests();
 
-        // Anis code starts
-        int repeats = 10;
+        int repeats = 5;
         int k = 5;
         UnitTestResultSet results = null;
         double orig = 0;
 
-        for (int i = 0; i < repeats; i++) {
+        for (int r = 0; r < repeats; r++) {
             results = initFitness(className, tests, origPatch);
             orig += fitness(results);
         }
-
         orig /= repeats;
-        // Anis code ends
 
-        super.writePatch(-1, 0,results, methodName, orig, 0);
+        super.writePatch(-1, 0, results, methodName, orig, 0);
 
         // Keep best
         double best = orig;
         Patch bestPatch = origPatch;
         ArrayList<Tuple> bestNeighbours = new ArrayList<>();
 
-
         for (int i = 1; i < indNumber; i++) {
 
             // Add a mutation
             Patch patch = mutate(bestPatch);
 
-            // Calculate fitness
-            // Anis code starts
-
             double newFitness = 0;
-            int j;
-            for (j = 0; j < repeats; j++) {
+            for (int j = 0; j < repeats; j++) {
                 results = testPatch(className, tests, patch, null);
-                newFitness += fitness(results);
                 if (!fitnessThreshold(results, orig)) {
                     break;
                 }
+                newFitness += fitness(results);
             }
-            newFitness /= (j+1);
+
             if (fitnessThreshold(results, orig) && (compareFitness(newFitness, best) > 0)) {
                 bestNeighbours.add(new Tuple(patch, newFitness));
             }
-            // Anis code ends
+
+            if (!fitnessThreshold(results, orig)) {
+                newFitness = Double.MAX_VALUE;
+            } else {
+                newFitness /= repeats;
+            }
 
             super.writePatch(i,i,results, methodName, newFitness, compareFitness(newFitness, orig));
 
             if (bestNeighbours.size() == k) {
-                best = orig;
-                bestPatch = origPatch;
                 for (Tuple tuple : bestNeighbours) {
                     if (tuple.fitness() > best) {
                         best = tuple.fitness();
