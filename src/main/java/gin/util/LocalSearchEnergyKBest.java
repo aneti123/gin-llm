@@ -117,8 +117,8 @@ public class LocalSearchEnergyKBest extends GP {
                     if (tuple.fitness() > best) {
                         best = tuple.fitness();
                         bestPatch = tuple.patch();
-                        numAdds++;
                     }
+                    numAdds++;
                 }
                 bestNeighbours.clear();
             }
