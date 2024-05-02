@@ -28,6 +28,8 @@ public abstract class GPSimple extends GP {
     // Probability of adding an edit during uniform crossover
     private static final double MUTATE_PROBABILITY = 0.5;
 
+    int numRuns = 5;
+
     public GPSimple(String[] args) {
         super(args);
     }
@@ -76,11 +78,17 @@ public abstract class GPSimple extends GP {
             // Add a mutation
             Patch patch = mutate(origPatch);
             // If fitnessThreshold met, add it
-            results = testPatch(className, tests, patch, null);
-            double fitness = fitness(results);
-            super.writePatch(-1, i, results, methodName, fitness, 0);
+
+            double fit = 0;
+            for (int k = 0; k < this.numRuns; k++) {
+                results = testPatch(className, tests, patch, null);
+                fit += fitness(results);
+            }
+            fit /= this.numRuns;
+
+            super.writePatch(-1, i, results, methodName, fit, 0);
             if (fitnessThreshold(results, orig)) {
-                population.put(patch, fitness);
+                population.put(patch, fit);
             }
 
         }
@@ -116,14 +124,18 @@ public abstract class GPSimple extends GP {
                 Logger.debug("Testing patch: " + patch);
 
                 // Test the patched source file
-                results = testPatch(className, tests, patch, null);
-                double newFitness = fitness(results);
+                double fit = 0;
+                for (int k = 0; k < this.numRuns; k++) {
+                    results = testPatch(className, tests, patch, null);
+                    fit += fitness(results);
+                }
+                fit /= this.numRuns;
 
                 // If fitness threshold met, add patch to the mating population
                 if (fitnessThreshold(results, orig)) {
-                    newPopulation.put(patch, newFitness);
+                    newPopulation.put(patch, fit);
                 }
-                super.writePatch(g, evals++, results, methodName, newFitness, compareFitness(newFitness, orig));
+                super.writePatch(g, evals++, results, methodName, fit, compareFitness(fit, orig));
             }
 
             population = new HashMap<>(newPopulation);
@@ -134,7 +146,6 @@ public abstract class GPSimple extends GP {
         }
 
     }
-
     /*====== GP Operators ======*/
 
     // Adds a random edit of the given type with equal probability among allowed types
