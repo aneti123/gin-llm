@@ -158,7 +158,7 @@ public class LLMLocalSearchEnergy extends LocalSearchSimple {
             }
 
             Logger.info(String.format("Step: %d, Patch: %s, %s ", step, neighbour, msg));
-            super.writePatch(step, step, testResultSet, methodName, improvement, improvement);
+            super.writePatch(step, step, testResultSet, methodName, currFitness, improvement);
         }
     }
 
