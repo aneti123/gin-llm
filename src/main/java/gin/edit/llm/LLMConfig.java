@@ -70,7 +70,7 @@ public class LLMConfig {
     
     public static String modelType="OpenAI"; // Should be param from c'tor
 
-    public static long timeoutInSeconds = 30;
+    public static long timeoutInSeconds = 120;
     
     // default for langchain4j
     public static double temperature = 0.7;
